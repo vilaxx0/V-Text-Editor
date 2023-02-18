@@ -13,6 +13,9 @@ struct termios original_termios;
     3. Removes "ISIG" features which when pressed:
     "Ctrl-C" sends a SIGINT signal to the current process which causes it to terminate
     "Ctrl-Z" sends a SIGTSTP signal to the current process which causes it to suspend
+
+    4. Removes "IXON" feature which when pressed:
+    "Ctrl-S" stops data from being transmitted to the terminal until you press "Ctrl-Q"
 */ 
 void enableRawMode() {
     tcgetattr(STDOUT_FILENO, &original_termios);
