@@ -1,24 +1,34 @@
-# Vilo Text Editor (VTE)
+# VTE - Text Editor in C
 
-Vilo Text Editor (VTE) is a simple, open-source text editor written from scratch in C programming language. It provides a minimalist interface with essential features such as text editing, search and replace, syntax highlighting, and more.
-
-**WORK IN PROGRESS**
+VTE is a simple, open-source text editor written from scratch in C programming language. It provides a minimalist interface with essential features such as text editing, search and replace, syntax highlighting, and more.
 
 ## Features
 
-- Syntax highlighting for several programming languages.
-- Tabbed interface for easy navigation between multiple files.
-- Search and replace functionality.
-- Cut, copy, and paste support.
-- Undo and redo functionality.
-- Open, save, and close files.
+- WORK IN PROGRESS
 
 ## Setup
 
 ### Requirements
 
-- C Compiler (such as gcc)
-- Linux or Unix based operating system.
+- C compiler (such as `gcc`)
+- Build automation tool (such as `make`)
+
+##### Linux
+
+To install the required software on a Linux or Unix based operating system, run the following command:
+
+```bash
+sudo apt update
+sudo apt-get install gcc make
+```
+
+##### macOS
+
+To install the required software on macOS using Homebrew, run the following command:
+
+```bash
+brew install gcc make
+```
 
 ### Installation
 
@@ -56,7 +66,7 @@ Once the program is launched, use the arrow keys to navigate and edit text. Use 
 
 ## Contributing
 
-Vilo Text Editor is an open-source project, and everyone is welcome to contribute. If you'd like to contribute, please follow these steps:
+This text editor is an open-source project, and everyone is welcome to contribute. If you'd like to contribute, please follow these steps:
 
 1. Fork the project and clone your forked repository to your local machine.
 2. Make your changes and commit them to your local repository.
@@ -67,4 +77,4 @@ Please make sure your code follows the project's coding conventions and passes a
 
 ## Credits
 
-Vilo Text Editor was created using the tutorial from [https://viewsourcecode.org/snaptoken/kilo/index.html](https://viewsourcecode.org/snaptoken/kilo/index.html).
+Text Editor was created using the tutorial from [https://viewsourcecode.org/snaptoken/kilo/index.html](https://viewsourcecode.org/snaptoken/kilo/index.html).
