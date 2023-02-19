@@ -1,4 +1,10 @@
+#include <stdlib.h>     // atexit(), exit()
+#include <unistd.h>     // read(), write(), STDIN_FILENO
+#include <termios.h>    // struct termios, tcgetattr(), tcsetattr(), TCSAFLUSH, ECHO, ICANON, ISIG, IXON
+// #include <errno.h>      // errno, EAGAIN
+
 #include "../header_files/raw_mode.h"
+#include "../header_files/common.h"
 
 // Original terminal attributes
 struct termios original_termios;
@@ -44,8 +50,9 @@ struct termios original_termios;
     If read() times out, it will return 0, which makes sense because its usual return value is the number of bytes read.
 */ 
 void enableRawMode() {
-    if(tcgetattr(STDOUT_FILENO, &original_termios) == -1)
+    if(tcgetattr(STDOUT_FILENO, &original_termios) == -1) {
         die("tcgetattr");
+    }
 
     atexit(disableRawMode);
     
@@ -78,7 +85,3 @@ void disableRawMode() {
         die("tcsetattr");
 }
 
-void die(const char* s) {
-    perror(s);
-    exit(1);
-}
