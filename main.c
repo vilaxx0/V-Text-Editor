@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdio.h>      // printf(), perror()
 #include <stdlib.h>     // atexit(), exit()
 #include <errno.h>
 
@@ -8,12 +8,12 @@
 
 int main() {
     enableRawMode();
+    initEditor();
 
     while(1) {
         editorRefreshScreen();
         editorProcessKeypress();     
     }
 
-    printf("Exiting...\r\n");
     return 0;
 }

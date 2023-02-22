@@ -1,13 +1,10 @@
+#include <stdio.h>      // printf(), perror()
 #include <stdlib.h>     // atexit(), exit()
 #include <unistd.h>     // read(), write(), STDIN_FILENO
 #include <termios.h>    // struct termios, tcgetattr(), tcsetattr(), TCSAFLUSH, ECHO, ICANON, ISIG, IXON
-// #include <errno.h>      // errno, EAGAIN
 
-#include "../header_files/raw_mode.h"
 #include "../header_files/common.h"
-
-// Original terminal attributes
-struct termios original_termios;
+#include "../header_files/raw_mode.h"
 
 /*
     1. Removes "ECHO" flag which causes each key press to be printed to the terminal.
@@ -50,12 +47,10 @@ struct termios original_termios;
     If read() times out, it will return 0, which makes sense because its usual return value is the number of bytes read.
 */ 
 void enableRawMode() {
-    if(tcgetattr(STDOUT_FILENO, &original_termios) == -1) {
+    // Open current terminal attributes
+    if(tcgetattr(STDOUT_FILENO, &editor.original_termios) == -1)
         die("tcgetattr");
-    }
 
-    atexit(disableRawMode);
-    
     /* 
         ~                           (bitwise-NOT operator) flips all bits
         &                           (bitwise-AND operator) returns bits set to 1 if both bits corresponding position are 1
@@ -66,7 +61,7 @@ void enableRawMode() {
         c_oflag                     "output flags"
         c_cflag                     "control flags"
     */
-    struct termios raw_termios = original_termios;
+    struct termios raw_termios = editor.original_termios;
     raw_termios.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
     raw_termios.c_oflag &= ~(OPOST);
     raw_termios.c_cflag |= (CS8);
@@ -75,13 +70,17 @@ void enableRawMode() {
     raw_termios.c_cc[VMIN] = 0;
     raw_termios.c_cc[VTIME] = 1;
 
-    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw_termios) == -1)
+    // Set current terminal attributes to raw terminal
+    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw_termios) == -1) 
         die("tcsetattr");
+
+    // Automatically called on program exit (exit(0) or exit(1))
+    atexit(disableRawMode);
 }
 
 // Disabling RAW mode by setting back the original terminal attributes
 void disableRawMode() {
-    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &original_termios) == -1) 
+    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &editor.original_termios) == -1) 
         die("tcsetattr");
 }
 
