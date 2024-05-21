@@ -77,4 +77,4 @@ Please make sure your code follows the project's coding conventions and passes a
 
 ## Credits
 
-Text Editor was created using the tutorial from [https://viewsourcecode.org/snaptoken/kilo/index.html](https://viewsourcecode.org/snaptoken/kilo/index.html).
+VTE foundation was created using the tutorial from [https://viewsourcecode.org/snaptoken/kilo/index.html](https://viewsourcecode.org/snaptoken/kilo/index.html).
