@@ -1,6 +1,6 @@
-# VTE - Text Editor in C
+# Text Editor in C
 
-VTE is a simple, open-source text editor written from scratch in C programming language. It provides a minimalist interface with essential features such as text editing, search and replace, syntax highlighting, and more.
+Simple, open-source text editor written from scratch in C programming language. It provides a minimalist interface with essential features such as text editing, search and replace, syntax highlighting, and more.
 
 ## Features
 
@@ -50,16 +50,16 @@ cd ViloTextEditor
 make
 ```
 
-This will create an executable file called `vte`.
+This will create an executable file called `program`.
 
 **Note for Windows users:** The `termios.h` header file used by this program is not available on Windows. As a result, you may encounter errors when compiling or running the program on a Windows machine. Consider using a Linux or Mac machine or a virtual machine running Linux to use this program.
 
 ## Usage
 
-To use VTE, simply run the executable file from the command line:
+To use, simply run the executable file from the command line:
 
 ```bash
-./vte
+./program
 ```
 
 Once the program is launched, use the arrow keys to navigate and edit text. Use `Ctrl-Q` to quit the program.
@@ -77,4 +77,4 @@ Please make sure your code follows the project's coding conventions and passes a
 
 ## Credits
 
-VTE foundation was created using the tutorial from [https://viewsourcecode.org/snaptoken/kilo/index.html](https://viewsourcecode.org/snaptoken/kilo/index.html).
+Foundation was created using the tutorial from [https://viewsourcecode.org/snaptoken/kilo/index.html](https://viewsourcecode.org/snaptoken/kilo/index.html).

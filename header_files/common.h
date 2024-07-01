@@ -5,15 +5,26 @@
 
 #include <termios.h>    // struct termios, tcgetattr(), tcsetattr(), TCSAFLUSH, ECHO, ICANON, ISIG, IXON
 
-void die(const char* s);
+typedef struct EditorRow {
+    int size;
+    char *chars;
+} EditorRow; 
+
 struct EditorConfig {
-    int cursorX, cursorY;
-    int screenRows;
+    int cursorX;
+    int cursorY;
     int screenCols;
+    int screenRows;
+    
+    int nrOfRows;
+    struct EditorRow row;
+
     // Original terminal attributes
     struct termios original_termios;
 };
 
 extern struct EditorConfig editor;
+
+void die(const char* s);
 
 #endif

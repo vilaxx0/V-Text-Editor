@@ -6,6 +6,8 @@
 #include "../header_files/common.h"
 #include "../header_files/raw_mode.h"
 
+/*** terminal ***/
+
 /*
     1. Removes "ECHO" flag which causes each key press to be printed to the terminal.
     *This is useful in canonical mode, but really gets in the way when we are trying to carefully render a user interface in raw mode.
