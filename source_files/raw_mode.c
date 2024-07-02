@@ -50,7 +50,7 @@
 */ 
 void enableRawMode() {
     // Open current terminal attributes
-    if(tcgetattr(STDOUT_FILENO, &editor.original_termios) == -1)
+    if(tcgetattr(STDOUT_FILENO, &editor.originalTermios) == -1)
         die("tcgetattr");
 
     /* 
@@ -63,7 +63,7 @@ void enableRawMode() {
         c_oflag                     "output flags"
         c_cflag                     "control flags"
     */
-    struct termios raw_termios = editor.original_termios;
+    struct termios raw_termios = editor.originalTermios;
     raw_termios.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
     raw_termios.c_oflag &= ~(OPOST);
     raw_termios.c_cflag |= (CS8);
@@ -82,7 +82,7 @@ void enableRawMode() {
 
 // Disabling RAW mode by setting back the original terminal attributes
 void disableRawMode() {
-    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &editor.original_termios) == -1) 
+    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &editor.originalTermios) == -1) 
         die("tcsetattr");
 }
 

@@ -62,6 +62,12 @@ To use, simply run the executable file from the command line:
 ./program
 ```
 
+To open a file, add an argument next to executable:
+
+```bash
+./program random_text_file.txt
+```
+
 Once the program is launched, use the arrow keys to navigate and edit text. Use `Ctrl-Q` to quit the program.
 
 ## Contributing

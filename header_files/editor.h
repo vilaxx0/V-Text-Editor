@@ -32,6 +32,6 @@ int getWindowSize(int* rows, int* cols);
 int getCursorPosition(int* rows, int* cols);
 void aBufAppend(struct ABuf* aBuf, const char* s, int len);
 void aBufFree(struct ABuf* aBuf);
-// void editorAppendRow(char *s, size_t len);
+void editorAppendRow(char *s, size_t length);
 
 #endif

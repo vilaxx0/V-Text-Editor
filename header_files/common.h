@@ -17,10 +17,10 @@ struct EditorConfig {
     int screenRows;
     
     int nrOfRows;
-    struct EditorRow row;
+    struct EditorRow *row;
 
     // Original terminal attributes
-    struct termios original_termios;
+    struct termios originalTermios;
 };
 
 extern struct EditorConfig editor;

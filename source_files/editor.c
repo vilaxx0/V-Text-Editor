@@ -20,6 +20,7 @@ void initEditor() {
     editor.cursorX = 0;
     editor.cursorY = 0;
     editor.nrOfRows = 0;
+    editor.row = NULL;
 
     if(getWindowSize(&editor.screenRows, &editor.screenCols) == -1) 
         die("getWindowSize");
@@ -34,16 +35,12 @@ void openEditor(char* filename) {
     char *line = NULL;
     size_t lineCapacity = 0;
     ssize_t lineLength = getline(&line, &lineCapacity, fp);
-    if (lineLength != -1) {
+    while ((lineLength = getline(&line, &lineCapacity, fp)) != -1) {
         while (lineLength > 0 && (line[lineLength - 1] == '\n' || line[lineLength - 1] == '\r')) {
             lineLength--;
         }
 
-        editor.row.size = lineLength;
-        editor.row.chars = malloc(lineLength + 1);
-        memcpy(editor.row.chars, line, lineLength);
-        editor.row.chars[lineLength] = '\0';
-        editor.nrOfRows = 1;
+        editorAppendRow(line, lineLength);
     }
 
     free(line);
@@ -287,11 +284,11 @@ void editorDrawRows(struct ABuf *aBuf) {
                 aBufAppend(aBuf, "~", 1);
             }
         } else {
-            int length = editor.row.size;
+            int length = editor.row[i].size;
             if(length > editor.screenCols)
                 length = editor.screenCols;
 
-            aBufAppend(aBuf, editor.row.chars, length);
+            aBufAppend(aBuf, editor.row[i].chars, length);
         }
         
         // Erase part of the current line (erases the part of the line to the right)
@@ -320,3 +317,14 @@ void aBufFree(struct ABuf* aBuf) {
 }
 
 
+/*** row operations ***/
+
+void editorAppendRow(char *s, size_t length) {
+    editor.row = realloc(editor.row, sizeof(EditorRow) * (editor.nrOfRows + 1));
+
+    editor.row[editor.nrOfRows].size = length;
+    editor.row[editor.nrOfRows].chars = malloc(length + 1);
+    memcpy(editor.row[editor.nrOfRows].chars, s, length);
+    editor.row[editor.nrOfRows].chars[length] = '\0';
+    editor.nrOfRows++;
+}
