@@ -8,9 +8,9 @@
 
 int main(int argc, char *argv[]) {
     enableRawMode();
-    initEditor();
+    editorInit();
     if (argc >= 2) {
-        openEditor(argv[1]);
+        editorOpen(argv[1]);
     }
     
     while (1) {

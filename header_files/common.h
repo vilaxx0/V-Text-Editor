@@ -15,8 +15,11 @@ struct EditorConfig {
     int cursorY;
     int screenCols;
     int screenRows;
+
+    int rowOffset;              // Row that the user is currently scrolled to (if 0 its top of the file)
+    int colOffset;
     
-    int nrOfRows;
+    int nrOfRows;               // Number of rows
     struct EditorRow *row;
 
     // Original terminal attributes

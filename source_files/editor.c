@@ -16,10 +16,12 @@
 
 /*** init ***/
 
-void initEditor() {
+void editorInit() {
     editor.cursorX = 0;
     editor.cursorY = 0;
     editor.nrOfRows = 0;
+    editor.rowOffset = 0;
+    editor.colOffset = 0;
     editor.row = NULL;
 
     if(getWindowSize(&editor.screenRows, &editor.screenCols) == -1) 
@@ -28,7 +30,7 @@ void initEditor() {
 
 /*** file i/o ***/
 
-void openEditor(char* filename) {
+void editorOpen(char* filename) {
     FILE *fp = fopen(filename, "r");
     if (!fp) die("fopen");
     
@@ -163,15 +165,23 @@ void editorProcessKeypress() {
 }
 
 void editorMoveCursor(int key) {
+    struct EditorRow *row = (editor.cursorY >= editor.nrOfRows) ? NULL : &editor.row[editor.cursorY];
+
     switch (key) {
         case ARROW_LEFT:
             if(editor.cursorX != 0) {
                 editor.cursorX--;
-            } 
+            } else if (editor.cursorY > 0) {
+                editor.cursorY--;
+                editor.cursorX = editor.row[editor.cursorY].size;
+            }
             break;
         case ARROW_RIGHT:
-            if(editor.cursorX != editor.screenCols - 1) {
+            if (row && editor.cursorX < row->size) {
                 editor.cursorX++;
+            } else if (row && editor.cursorX == row->size) {
+                editor.cursorY++;
+                editor.cursorX = 0;
             }
             break;
         case ARROW_UP:
@@ -180,10 +190,17 @@ void editorMoveCursor(int key) {
             }
             break;
         case ARROW_DOWN:
-            if(editor.cursorY != editor.screenRows - 1) {
+            if(editor.cursorY < editor.nrOfRows) {
                 editor.cursorY++;
             }
             break;
+    }
+
+    row = (editor.cursorY >= editor.nrOfRows) ? NULL : &editor.row[editor.cursorY];
+    int rowLength = row ? row->size : 0;
+
+    if (editor.cursorX > rowLength) {
+        editor.cursorX = rowLength;
     }
 }
 
@@ -234,6 +251,8 @@ int getCursorPosition(int* rows, int* cols) {
 /*** output ***/
 
 void editorRefreshScreen() {
+    editorScroll();
+
     struct ABuf aBuf = ABUF_INIT;
 
     // Hide cursor
@@ -249,7 +268,7 @@ void editorRefreshScreen() {
 
     // Reposition cursor
     char buf[23];
-    snprintf(buf, sizeof(buf), "\x1b[%d;%dH", editor.cursorY + 1, editor.cursorX + 1);
+    snprintf(buf, sizeof(buf), "\x1b[%d;%dH", (editor.cursorY - editor.rowOffset) + 1, (editor.cursorX - editor.colOffset) + 1);
     aBufAppend(&aBuf, buf, strlen(buf));
 
     // Show cursor
@@ -261,7 +280,8 @@ void editorRefreshScreen() {
 
 void editorDrawRows(struct ABuf *aBuf) {
     for (int i = 0; i < editor.screenRows; i++) {
-        if (i >= editor.nrOfRows) {
+        int fileRow = i + editor.rowOffset;
+        if (fileRow >= editor.nrOfRows) {
             if (i == 1 && editor.nrOfRows == 0) {
                 char welcome[80];
                 int welcomeLength = snprintf(welcome, sizeof(welcome), "VTE editor -- version %s", VTE_VERSION);
@@ -284,11 +304,15 @@ void editorDrawRows(struct ABuf *aBuf) {
                 aBufAppend(aBuf, "~", 1);
             }
         } else {
-            int length = editor.row[i].size;
-            if(length > editor.screenCols)
+            int length = editor.row[fileRow].size - editor.colOffset;
+
+            if (length < 0)
+                length = 0;
+
+            if (length > editor.screenCols)
                 length = editor.screenCols;
 
-            aBufAppend(aBuf, editor.row[i].chars, length);
+            aBufAppend(aBuf, &editor.row[fileRow].chars[editor.colOffset], length);
         }
         
         // Erase part of the current line (erases the part of the line to the right)
@@ -297,6 +321,24 @@ void editorDrawRows(struct ABuf *aBuf) {
         if(i < editor.screenRows - 1) 
             aBufAppend(aBuf, "\r\n", 2);
     }
+}
+
+void editorScroll() {
+  if (editor.cursorY < editor.rowOffset) {
+    editor.rowOffset = editor.cursorY;
+  }
+
+  if (editor.cursorY >= editor.rowOffset + editor.screenRows) {
+    editor.rowOffset = editor.cursorY - editor.screenRows + 1;
+  }
+
+  if (editor.cursorX < editor.colOffset) {
+    editor.colOffset = editor.cursorX;
+  }
+  
+  if (editor.cursorX >= editor.colOffset + editor.screenCols) {
+    editor.rowOffset = editor.cursorY - editor.screenCols + 1;
+  }
 }
 
 /*** append buffer ***/
@@ -315,7 +357,6 @@ void aBufAppend(struct ABuf* aBuf, const char* s, int len) {
 void aBufFree(struct ABuf* aBuf) {
     free(aBuf->b);
 }
-
 
 /*** row operations ***/
 

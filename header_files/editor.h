@@ -21,13 +21,14 @@ struct ABuf {
   int len;
 };
 
-void initEditor();
-void openEditor(char* filename);
+void editorInit();
+void editorOpen(char* filename);
 void editorMoveCursor(int key);
 int editorReadKey();
 void editorProcessKeypress();
 void editorRefreshScreen();
 void editorDrawRows(struct ABuf *aBuf);
+void editorScroll();
 int getWindowSize(int* rows, int* cols);
 int getCursorPosition(int* rows, int* cols);
 void aBufAppend(struct ABuf* aBuf, const char* s, int len);
