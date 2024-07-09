@@ -3,6 +3,7 @@
 
 #define ABUF_INIT {NULL, 0}
 #define VTE_VERSION "0.0.1"
+#define KILO_TAB_STOP 8
 
 enum EDITOR_KEY {
   ARROW_LEFT = 1000,
@@ -34,5 +35,7 @@ int getCursorPosition(int* rows, int* cols);
 void aBufAppend(struct ABuf* aBuf, const char* s, int len);
 void aBufFree(struct ABuf* aBuf);
 void editorAppendRow(char *s, size_t length);
+void editorUpdateRow(EditorRow *row);
+int editorRowCxToRx(EditorRow *row, int cursorX);
 
 #endif

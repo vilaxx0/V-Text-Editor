@@ -8,11 +8,16 @@
 typedef struct EditorRow {
     int size;
     char *chars;
+
+    int rSize;
+    char *renderChars;
 } EditorRow; 
 
 struct EditorConfig {
     int cursorX;
     int cursorY;
+    int rX;
+    
     int screenCols;
     int screenRows;
 
